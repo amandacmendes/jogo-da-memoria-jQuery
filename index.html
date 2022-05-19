@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Jogo da Memória</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Amanda Mendes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="img-jogo-mem/ryan-icon-test.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+        crossorigin="anonymous"></script>
+
+    <!-- J Query -->
+    <!-- jQuery compressed for production -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var nomes = [];
+            var ids = [];
+            var points = 000;
+            var validarPontos = [];
+            var imagens = ["img-jogo-mem/apeach.jpg",
+                "img-jogo-mem/conn.png",
+                "img-jogo-mem/muzi.png",
+                "img-jogo-mem/neo.jpg",
+                "img-jogo-mem/ryan-1.png",
+                "img-jogo-mem/tube.png",
+                "img-jogo-mem/apeach.jpg",
+                "img-jogo-mem/conn.png",
+                "img-jogo-mem/muzi.png",
+                "img-jogo-mem/neo.jpg",
+                "img-jogo-mem/ryan-1.png",
+                "img-jogo-mem/tube.png",];
+
+            //Fisher-Yates shuffle
+            function shuffle(array) {
+                let currentIndex = array.length, randomIndex;
+
+                // While there remain elements to shuffle.
+                while (currentIndex != 0) {
+
+                    // Pick a remaining element.
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    // And swap it with the current element.
+                    [array[currentIndex], array[randomIndex]] = [
+                        array[randomIndex], array[currentIndex]];
+                }
+
+                return array;
+            }
+
+            //randomizar cartas OK
+            imagens = shuffle(imagens);
+            var divnumber = Array.from(document.getElementsByClassName('card'));
+            var i = 0;
+            divnumber.forEach(divnumber => {
+                var imgstring = '<img class="card-img" src=' + imagens[i] + ' id =card'+i+'>';
+                i++;
+                $(divnumber).html(imgstring);
+            })
+
+            //esconder imagens
+            $(".card-img").hide(1500);
+
+            $(".card").click(function () {
+                $(this).children(".card-img").show(400);
+
+                nomes.push($(this).children().attr("src"));
+                ids.push($(this).children());
+
+                if (nomes[1] != undefined) {
+                    if (nomes[0] == nomes[1] && ids[0] !== ids[1]) {
+                        if (jQuery.inArray(nomes[1], validarPontos) == -1) {
+                            console.log(nomes[1]);
+                            points++;
+                            validarPontos.push(nomes[1]);
+                        }
+                    } else {
+
+                        ids.forEach(ids => {
+                            $(ids).fadeToggle();
+                        })
+                        //$(ids[0]).fadeToggle();
+                        //$(ids[1]).fadeToggle();
+                    }
+
+                    nomes = [];
+                    ids = [];
+                }
+
+                //contabiliza pontos
+                document.getElementById("pontos").innerHTML = points;
+
+                ganhar();
+
+            });
+
+            //function ganhar está funcionando
+            function ganhar() {
+                if (points === 6) {
+                    alert("Você ganhou!!");
+                } 
+            }
+
+        });
+    </script>
+
+    <style>
+        .card {
+            min-height: 260px;
+            min-width: 260px;
+            margin-bottom: 20px;
+        }
+
+        .card-img {
+            height: 250px;
+            width: 250px;
+            align-self: center;
+        }
+
+        .jumbotron-texto {
+            font-weight: bold;
+        }
+
+        footer {
+            height: 100px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Jumbotron -->
+    <div class="jumbotron jumbotron-fluidpx-3 bg-info text-light" align="center">
+        <div class="jumbotron-texto ">
+            <h1 class="display-4 ">Jogo da Memória</h1>
+            <p>Jogo da memória utilizando JavaScript e jQuery</p>
+            <span>Pontos: </span>
+            <p id="pontos"> 0 </p>
+        </div>
+    </div>
+
+    <div class="container ">
+        <div class="row my-2">
+
+            <!-- um -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-1">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-2">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 3 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-3">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="col-sm-12 col-md-6 col-lg-3 col-pergunta" id="div-card-tube-1">
+                <div class="card" id="card-4">
+                    <img class="card-img" src="img-jogo-mem/">
+                </div>
+            </div>
+
+
+        </div>
+        <footer> </footer>
+
+</body>
+
+</html>
